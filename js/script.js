@@ -4,7 +4,9 @@ let r = 23
 let y = 128
 let g = 107
 let b = 114
-
+let cells_4_right_bottom_border = [7, 8, 9, 22, 23, 24, 37, 38, 39, 52, 53, 54, 67, 68, 69, 82, 83, 84, 91, 92, 93, 94, 95, 96, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 130, 131, 132, 133, 134, 135, 142, 143, 144, 157, 158, 159, 172, 173, 174, 187, 188, 189, 202, 203, 204, 217, 218, 219]
+let cells_4_right_border = [6, 21, 36, 51, 66, 81, 114, 141, 156, 171, 186, 201, 216]
+let cells_4_bottom_border = [76, 77, 78, 79, 80, 81, 85, 86, 87, 88, 89, 90, 128]
 // console.log(divs)
 
 divs.forEach(element => {
@@ -53,6 +55,22 @@ for (let i = 1; i <= (15 * 15); i++) {
             cell.classList.add('child')
         }
     }
+
+
+    if (cells_4_right_bottom_border.includes(i)) {
+        cell.style.borderRight = '0.5px solid lightblue'
+        cell.style.borderBottom = '0.5px solid lightblue'
+
+    }
+
+    if (cells_4_right_border.includes(i)) {
+        cell.style.borderRight = '0.5px solid lightblue'
+    }
+
+    if (cells_4_bottom_border.includes(i)) {
+        cell.style.borderBottom = '0.5px solid lightblue'
+    }
+
     
     board.appendChild(cell)
 }
