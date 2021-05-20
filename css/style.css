@@ -116,3 +116,34 @@ body {
     border-bottom: 3vmin solid yellow;
     border-left: 3vmin solid yellow;
 }
+
+
+.board-cell-2x2 {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.board-cell-1x2 {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.board-cell-1x1 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.board-cell-2x2 img, .board-cell-1x2 img, .board-cell-1x1 img {
+    width: 100%;
+    align-self: center;
+}
