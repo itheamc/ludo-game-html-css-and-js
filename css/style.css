@@ -22,6 +22,20 @@ body {
     background-color: black;
 }
 
+.dice {
+    width: 8vmin;
+    height: 8vmin;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    color: whitesmoke;
+    font-size: 16px;
+    background-color: hotpink;
+    z-index: 10;
+}
+
 .board {
     width: 90vmin;
     height: 90vmin;
@@ -143,7 +157,8 @@ body {
     align-items: center;
 }
 
+
 .board-cell-2x2 img, .board-cell-1x2 img, .board-cell-1x1 img {
-    width: 100%;
+    width: 75%;
     align-self: center;
 }

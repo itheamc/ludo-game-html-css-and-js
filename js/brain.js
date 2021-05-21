@@ -1,39 +1,49 @@
 const divs = document.querySelectorAll(".child");
 const board = document.getElementById('board');
 const inner_board = document.getElementById('inner-board')
+const dice = document.getElementById('dice')
 
 /**
  * Blue tickets
  */
-const blue_ticket_one = document.getElementById('blue-ticket-1')
-const blue_ticket_two = document.getElementById('blue-ticket-2')
-const blue_ticket_three = document.getElementById('blue-ticket-3')
-const blue_ticket_four = document.getElementById('blue-ticket-4')
+const blue_token_one = document.getElementById('blue-ticket-1')
+const blue_token_two = document.getElementById('blue-ticket-2')
+const blue_token_three = document.getElementById('blue-ticket-3')
+const blue_token_four = document.getElementById('blue-ticket-4')
 
 /**
  * Yellow Tickets
  */
- const yellow_ticket_one = document.getElementById('yellow-ticket-1')
- const yellow_ticket_two = document.getElementById('yellow-ticket-2')
- const yellow_ticket_three = document.getElementById('yellow-ticket-3')
- const yellow_ticket_four = document.getElementById('yellow-ticket-4')
+ const yellow_token_one = document.getElementById('yellow-ticket-1')
+ const yellow_token_two = document.getElementById('yellow-ticket-2')
+ const yellow_token_three = document.getElementById('yellow-ticket-3')
+ const yellow_token_four = document.getElementById('yellow-ticket-4')
 
 
 /**
  * Green Tickets
  */
- const green_ticket_one = document.getElementById('green-ticket-1')
- const green_ticket_two = document.getElementById('green-ticket-2')
- const green_ticket_three = document.getElementById('green-ticket-3')
- const green_ticket_four = document.getElementById('green-ticket-4')
+ const green_token_one = document.getElementById('green-ticket-1')
+ const green_token_two = document.getElementById('green-ticket-2')
+ const green_token_three = document.getElementById('green-ticket-3')
+ const green_token_four = document.getElementById('green-ticket-4')
 
 /**
  * Red Tickets
  */
- const red_ticket_one = document.getElementById('red-ticket-1')
- const red_ticket_two = document.getElementById('red-ticket-2')
- const red_ticket_three = document.getElementById('red-ticket-3')
- const red_ticket_four = document.getElementById('red-ticket-4')
+ const red_token_one = document.getElementById('red-ticket-1')
+ const red_token_two = document.getElementById('red-ticket-2')
+ const red_token_three = document.getElementById('red-ticket-3')
+ const red_token_four = document.getElementById('red-ticket-4')
+
+//  const R1 = document.getElementById('red-ticket-1')
+//  const R2 = document.getElementById('red-ticket-2')
+//  const R3 = document.getElementById('red-ticket-3')
+//  const R4 = document.getElementById('red-ticket-4')
+
+ /**
+  * These are the variables that will used to create the ludo board
+  */
 
 let r = 23
 let y = 128
@@ -59,10 +69,26 @@ let cells_4_bottom_border = [76, 77, 78, 79, 80, 81, 85, 86, 87, 88, 89, 90, 128
   * Arrays containing each tokens position on the board and index of path
   * -------------------------------------------------------------------------------
   */
- let red_tokens_position = [{i: 0, x: 10, y: 15}, {i: 0, x: 10, y: 15}, {i: 0, x: 10, y: 15}, {i: 0, x: 10, y: 15}]
- let blue_tokens_position = [{i: 0, x: 10, y: 15}, {i: 0, x: 10, y: 15}, {i: 0, x: 10, y: 15}, {i: 0, x: 10, y: 15}]
- let yellow_tokens_position = [{i: 0, x: 10, y: 15}, {i: 0, x: 10, y: 15}, {i: 0, x: 10, y: 15}, {i: 0, x: 10, y: 15}]
- let green_tokens_position = [{i: 0, x: 10, y: 15}, {i: 0, x: 10, y: 15}, {i: 0, x: 10, y: 15}, {i: 0, x: 10, y: 15}]
+ let red_tokens = [{e: red_token_one, p: red_paths, t: 'R1', i: 0}, {e: red_token_two, p: red_paths, t: 'R2', i: 0}, {e: red_token_three, p: red_paths, t: 'R3', i: 0}, {e: red_token_four, p: red_paths, t: 'R4', i: 0}]
+ let blue_tokens = [{e: blue_token_one, p: blue_paths, t: 'B1', i: 0}, {e: blue_token_two, p: blue_paths, t: 'B2', i: 0}, {e: blue_token_three, p: blue_paths, t: 'B3', i: 0}, {e: blue_token_four, p: blue_paths, t: 'B4', i: 0}]
+ let yellow_tokens = [{e: yellow_token_one, p: yellow_paths, t: 'Y1', i: 0}, {e: yellow_token_two, p: yellow_paths, t: 'Y2', i: 0}, {e: yellow_token_three, p: yellow_paths, t: 'Y3', i: 0}, {e: yellow_token_four, p: yellow_paths, t: 'Y4', i: 0}]
+ let green_tokens = [{e: green_token_one, p: green_paths, t: 'G1', i: 0}, {e: green_token_two, p: green_paths, t: 'G2', i: 0}, {e: green_token_three, p: green_paths, t: 'G3', i: 0}, {e: green_token_four, p: green_paths, t: 'G4', i: 0}]
+
+
+ /**
+  * ---------------------------------------------------------------------------
+  * These are the global variables that will used to handle the move
+  * ---------------------------------------------------------------------------
+  */
+ let t = null   // Where t represents the ticket reference that the player want to move
+ let n = 6      // Where n represents the number that the player got by rolling a dice
+ let p = null   // Where p represents the player who roll the dice
+ let start_position = 0     // Where start_position represents the position from where the ticket start to move
+ let end_position = 0;      // Where end_position represents the position where the ticket will stop moving
+ let temp_position = 0;     // Where temp_position represents the current moving position of ticket
+ let isMoving = false
+ let token = null          // Where ticket represents the ticket that the player want to move
+ let paths_arr = null
 
 /**
  * --------------------------------------------------------------------------
@@ -138,32 +164,32 @@ function createLudoBoard() {
  * Placing blue tickets in the board
  */
 const placeBlueTickets = () => {
-    blue_ticket_one.style.gridColumnStart = 11
-    blue_ticket_one.style.gridRowStart = 11
+    blue_token_one.style.gridColumnStart = 11
+    blue_token_one.style.gridRowStart = 11
 
-    blue_ticket_one.style.gridColumnEnd = 13
-    blue_ticket_one.style.gridRowEnd = 13
+    blue_token_one.style.gridColumnEnd = 13
+    blue_token_one.style.gridRowEnd = 13
     // blue_ticket_one.style.backgroundColor = "red"
 
-    blue_ticket_two.style.gridColumnStart = 13
-    blue_ticket_two.style.gridRowStart = 11
+    blue_token_two.style.gridColumnStart = 13
+    blue_token_two.style.gridRowStart = 11
 
-    blue_ticket_two.style.gridColumnEnd = 15
-    blue_ticket_two.style.gridRowEnd = 13
+    blue_token_two.style.gridColumnEnd = 15
+    blue_token_two.style.gridRowEnd = 13
     // blue_ticket_two.style.backgroundColor = "yellow"
 
-    blue_ticket_three.style.gridColumnStart = 11
-    blue_ticket_three.style.gridRowStart = 13
+    blue_token_three.style.gridColumnStart = 11
+    blue_token_three.style.gridRowStart = 13
 
-    blue_ticket_three.style.gridColumnEnd = 13
-    blue_ticket_three.style.gridRowEnd = 15
+    blue_token_three.style.gridColumnEnd = 13
+    blue_token_three.style.gridRowEnd = 15
     // blue_ticket_three.style.backgroundColor = "yellow"
 
-    blue_ticket_four.style.gridColumnStart = 13
-    blue_ticket_four.style.gridRowStart = 13
+    blue_token_four.style.gridColumnStart = 13
+    blue_token_four.style.gridRowStart = 13
 
-    blue_ticket_four.style.gridColumnEnd = 15
-    blue_ticket_four.style.gridRowEnd = 15
+    blue_token_four.style.gridColumnEnd = 15
+    blue_token_four.style.gridRowEnd = 15
     // blue_ticket_four.style.backgroundColor = "red"
 }
 
@@ -172,32 +198,32 @@ const placeBlueTickets = () => {
  * Placing blue tickets in the board
  */
  const placeYellowTickets = () => {
-    yellow_ticket_one.style.gridColumnStart = 2
-    yellow_ticket_one.style.gridRowStart = 11
+    yellow_token_one.style.gridColumnStart = 2
+    yellow_token_one.style.gridRowStart = 11
 
-    yellow_ticket_one.style.gridColumnEnd = 4
-    yellow_ticket_one.style.gridRowEnd = 13
+    yellow_token_one.style.gridColumnEnd = 4
+    yellow_token_one.style.gridRowEnd = 13
     // blue_ticket_one.style.backgroundColor = "red"
 
-    yellow_ticket_two.style.gridColumnStart = 4
-    yellow_ticket_two.style.gridRowStart = 11
+    yellow_token_two.style.gridColumnStart = 4
+    yellow_token_two.style.gridRowStart = 11
 
-    yellow_ticket_two.style.gridColumnEnd = 6
-    yellow_ticket_two.style.gridRowEnd = 13
+    yellow_token_two.style.gridColumnEnd = 6
+    yellow_token_two.style.gridRowEnd = 13
     // blue_ticket_two.style.backgroundColor = "yellow"
 
-    yellow_ticket_three.style.gridColumnStart = 2
-    yellow_ticket_three.style.gridRowStart = 13
+    yellow_token_three.style.gridColumnStart = 2
+    yellow_token_three.style.gridRowStart = 13
 
-    yellow_ticket_three.style.gridColumnEnd = 4
-    yellow_ticket_three.style.gridRowEnd = 15
+    yellow_token_three.style.gridColumnEnd = 4
+    yellow_token_three.style.gridRowEnd = 15
     // blue_ticket_three.style.backgroundColor = "yellow"
 
-    yellow_ticket_four.style.gridColumnStart = 4
-    yellow_ticket_four.style.gridRowStart = 13
+    yellow_token_four.style.gridColumnStart = 4
+    yellow_token_four.style.gridRowStart = 13
 
-    yellow_ticket_four.style.gridColumnEnd = 6
-    yellow_ticket_four.style.gridRowEnd = 15
+    yellow_token_four.style.gridColumnEnd = 6
+    yellow_token_four.style.gridRowEnd = 15
     // blue_ticket_four.style.backgroundColor = "red"
 }
 
@@ -206,32 +232,32 @@ const placeBlueTickets = () => {
  * Placing blue tickets in the board
  */
  const placeGreenTickets = () => {
-    green_ticket_one.style.gridColumnStart = 2
-    green_ticket_one.style.gridRowStart = 2
+    green_token_one.style.gridColumnStart = 2
+    green_token_one.style.gridRowStart = 2
 
-    green_ticket_one.style.gridColumnEnd = 4
-    green_ticket_one.style.gridRowEnd = 4
+    green_token_one.style.gridColumnEnd = 4
+    green_token_one.style.gridRowEnd = 4
     // blue_ticket_one.style.backgroundColor = "red"
 
-    green_ticket_two.style.gridColumnStart = 4
-    green_ticket_two.style.gridRowStart = 2
+    green_token_two.style.gridColumnStart = 4
+    green_token_two.style.gridRowStart = 2
 
-    green_ticket_two.style.gridColumnEnd = 6
-    green_ticket_two.style.gridRowEnd = 4
+    green_token_two.style.gridColumnEnd = 6
+    green_token_two.style.gridRowEnd = 4
     // blue_ticket_two.style.backgroundColor = "yellow"
 
-    green_ticket_three.style.gridColumnStart = 2
-    green_ticket_three.style.gridRowStart = 4
+    green_token_three.style.gridColumnStart = 2
+    green_token_three.style.gridRowStart = 4
 
-    green_ticket_three.style.gridColumnEnd = 4
-    green_ticket_three.style.gridRowEnd = 6
+    green_token_three.style.gridColumnEnd = 4
+    green_token_three.style.gridRowEnd = 6
     // blue_ticket_three.style.backgroundColor = "yellow"
 
-    green_ticket_four.style.gridColumnStart = 4
-    green_ticket_four.style.gridRowStart = 4
+    green_token_four.style.gridColumnStart = 4
+    green_token_four.style.gridRowStart = 4
 
-    green_ticket_four.style.gridColumnEnd = 6
-    green_ticket_four.style.gridRowEnd = 6
+    green_token_four.style.gridColumnEnd = 6
+    green_token_four.style.gridRowEnd = 6
     // blue_ticket_four.style.backgroundColor = "red"
 }
 
@@ -240,32 +266,32 @@ const placeBlueTickets = () => {
  * Placing blue tickets in the board
  */
  const placeRedTickets = () => {
-    red_ticket_one.style.gridColumnStart = 11
-    red_ticket_one.style.gridRowStart = 2
+    red_token_one.style.gridColumnStart = 11
+    red_token_one.style.gridRowStart = 2
 
-    red_ticket_one.style.gridColumnEnd = 13
-    red_ticket_one.style.gridRowEnd = 4
+    red_token_one.style.gridColumnEnd = 13
+    red_token_one.style.gridRowEnd = 4
     // blue_ticket_one.style.backgroundColor = "red"
 
-    red_ticket_two.style.gridColumnStart = 13
-    red_ticket_two.style.gridRowStart = 2
+    red_token_two.style.gridColumnStart = 13
+    red_token_two.style.gridRowStart = 2
 
-    red_ticket_two.style.gridColumnEnd = 15
-    red_ticket_two.style.gridRowEnd = 4
+    red_token_two.style.gridColumnEnd = 15
+    red_token_two.style.gridRowEnd = 4
     // blue_ticket_two.style.backgroundColor = "yellow"
 
-    red_ticket_three.style.gridColumnStart = 11
-    red_ticket_three.style.gridRowStart = 4
+    red_token_three.style.gridColumnStart = 11
+    red_token_three.style.gridRowStart = 4
 
-    red_ticket_three.style.gridColumnEnd = 13
-    red_ticket_three.style.gridRowEnd = 6
+    red_token_three.style.gridColumnEnd = 13
+    red_token_three.style.gridRowEnd = 6
     // blue_ticket_three.style.backgroundColor = "yellow"
 
-    red_ticket_four.style.gridColumnStart = 13
-    red_ticket_four.style.gridRowStart = 4
+    red_token_four.style.gridColumnStart = 13
+    red_token_four.style.gridRowStart = 4
 
-    red_ticket_four.style.gridColumnEnd = 15
-    red_ticket_four.style.gridRowEnd = 6
+    red_token_four.style.gridColumnEnd = 15
+    red_token_four.style.gridRowEnd = 6
     // blue_ticket_four.style.backgroundColor = "red"
 }
 
@@ -278,37 +304,115 @@ const addClickEventListenerOnTickets = () => {
     /**
  * Blue tickets
  */
-blue_ticket_one.addEventListener('click', e => handleMove(e))
-blue_ticket_two.addEventListener('click', e => handleMove(e))
-blue_ticket_three.addEventListener('click', e => handleMove(e))
-blue_ticket_four.addEventListener('click', e => handleMove(e))
+blue_token_one.addEventListener('click', e => handleTicketClick(e))
+blue_token_two.addEventListener('click', e => handleTicketClick(e))
+blue_token_three.addEventListener('click', e => handleTicketClick(e))
+blue_token_four.addEventListener('click', e => handleTicketClick(e))
 
 /**
  * Yellow Tickets
  */
- yellow_ticket_one.addEventListener('click', e => handleMove(e))
- yellow_ticket_two.addEventListener('click', e => handleMove(e))
- yellow_ticket_three.addEventListener('click', e => handleMove(e))
- yellow_ticket_four.addEventListener('click', e => handleMove(e))
+ yellow_token_one.addEventListener('click', e => handleTicketClick(e))
+ yellow_token_two.addEventListener('click', e => handleTicketClick(e))
+ yellow_token_three.addEventListener('click', e => handleTicketClick(e))
+ yellow_token_four.addEventListener('click', e => handleTicketClick(e))
 
 
 /**
  * Green Tickets
  */
- green_ticket_one.addEventListener('click', e => handleMove(e))
- green_ticket_two.addEventListener('click', e => handleMove(e))
- green_ticket_three.addEventListener('click', e => handleMove(e))
- green_ticket_four.addEventListener('click', e => handleMove(e))
+ green_token_one.addEventListener('click', e => handleTicketClick(e))
+ green_token_two.addEventListener('click', e => handleTicketClick(e))
+ green_token_three.addEventListener('click', e => handleTicketClick(e))
+ green_token_four.addEventListener('click', e => handleTicketClick(e))
 
 /**
  * Red Tickets
  */
- red_ticket_one.addEventListener('click', e => handleMove(e))
- red_ticket_two.addEventListener('click', e => handleMove(e))
- red_ticket_three.addEventListener('click', e => handleMove(e))
- red_ticket_four.addEventListener('click', e => handleMove(e))
+ red_token_one.addEventListener('click', e => handleTicketClick(e))
+ red_token_two.addEventListener('click', e => handleTicketClick(e))
+ red_token_three.addEventListener('click', e => handleTicketClick(e))
+ red_token_four.addEventListener('click', e => handleTicketClick(e))
 }
 
+
+
+/**
+ * This is a looper function which will move of the ticket
+ * It will loop again and again until the ticket move to the drawn number of times
+ */
+ let lastTime = 0;
+ const moveLooper = (ctime) => {
+    if (temp_position <= end_position) {
+        window.requestAnimationFrame(moveLooper)
+    }
+ 
+     if (((ctime - lastTime)/1000) < 0.3) {
+         // lastTime = ctime
+         return
+     }
+
+    //  isAnyTokenThere()
+
+     token.style.gridColumnStart = paths_arr[temp_position].y 
+     token.style.gridRowStart = paths_arr[temp_position].x
+    
+     token.style.gridColumnEnd = paths_arr[temp_position].y + 1
+     token.style.gridRowEnd = paths_arr[temp_position].x + 1
+ 
+     temp_position ++;
+     lastTime = ctime
+
+     if (temp_position > end_position) {
+         isMoving = false
+    }
+ 
+ // window.requestAnimationFrame(main)
+     console.log(ctime)
+ // window.requestAnimationFrame(main)
+ }
+ 
+
+
+/**
+ * This is a looper function which will move of the ticket
+ * It will loop again and again until the ticket move to the drawn number of times
+ */
+ let lt = 0;    // lt stands for short form of last time
+ const handleTicketThrown = (ctime) => {
+
+     if (temp_position <= end_position) {
+         window.requestAnimationFrame(handleMove)
+     }
+ 
+     if (((ctime - lt)/1000) < 0.3) {
+         // lastTime = ctime
+         return
+     }
+
+
+    //  ticekt.style.gridColumnStart = paths_arr[temp_position].y 
+    //  ticekt.style.gridRowStart = paths_arr[temp_position].x
+    
+    //  ticekt.style.gridColumnEnd = paths_arr[temp_position].y + 1
+    //  ticekt.style.gridRowEnd = paths_arr[temp_position].x + 1
+
+     
+     temp_position ++;
+     lt = ctime
+
+     if (temp_position === end_position) {
+         isMoving = false
+         lt = 0
+    }
+ 
+ // window.requestAnimationFrame(main)
+     console.log(ctime)
+ // window.requestAnimationFrame(main)
+ }
+
+
+ 
 
 /**
  * ----------------------------------------------------------------------------
@@ -316,9 +420,8 @@ blue_ticket_four.addEventListener('click', e => handleMove(e))
  * ----------------------------------------------------------------------------
  */
 const isAnyTokenThere = () => {
-    if (condition) {
-        
-    }
+    
+
 }
 
 
@@ -327,6 +430,90 @@ const isAnyTokenThere = () => {
  * Function to handle the move
  * ----------------------------------------------------------------------------
  */
-const handleMove = (e) => {
-    console.log(e)
+const handleTicketClick = (e) => {
+    if (isMoving) {
+        return
+    }
+    let isMovable = false
+    t = (e.target.alt).toString()
+    
+    if (t.startsWith('R')) {
+        red_tokens.forEach((element, index) => {
+            if (t === element.t) {
+                if (element.i + n < red_paths.length) {
+                    start_position = element.i
+                    end_position = start_position + n
+                    temp_position = start_position
+                    red_tokens[index].i = end_position
+                    token = element.e
+                    paths_arr = element.p
+                    isMovable = true
+                }
+            }
+        });
+        
+    } else if (t.startsWith('G')) {
+        green_tokens.forEach((element, index) => {
+            if (t === element.t) {
+                if (element.i + n < green_paths.length) {
+                    start_position = element.i
+                    end_position = start_position + n
+                    temp_position = start_position
+                    green_tokens[index].i = end_position
+                    token = element.e
+                    paths_arr = element.p
+                    isMovable = true
+                }
+            }
+        });
+        
+    } else if (t.startsWith('B')) {
+        blue_tokens.forEach((element, index) => {
+            if (t === element.t) {
+                if (element.i + n < blue_paths.length) {
+                    start_position = element.i
+                    end_position = start_position + n
+                    temp_position = start_position
+                    blue_tokens[index].i = end_position
+                    token = element.e
+                    paths_arr = element.p
+                    isMovable = true
+                }
+            }
+        });
+        
+   } else {
+        yellow_tokens.forEach((element, index) => {
+            if (t === element.t) {
+                if (element.i + n < yellow_paths.length) {
+                    start_position = element.i
+                    end_position = start_position + n
+                    temp_position = start_position
+                    yellow_tokens[index].i = end_position
+                    token = element.e
+                    paths_arr = element.p
+                    isMovable = true
+                }
+            }
+        });
+
+   }
+
+   if (isMovable === true) {
+       isMoving = true
+       window.requestAnimationFrame(moveLooper)
+   }
 }
+
+
+/**
+ * ------------------------------------------------------------------
+ * Function to get random roll number
+ * ------------------------------------------------------------------
+ */
+const rollTheDice = () => {
+    n = Math.floor(Math.random() * (7 - 1) + 1)     // Number between 1 and 7 where 1 is included and 7 is excluded
+    dice.innerText = n
+}
+
+dice.addEventListener('click', rollTheDice)
